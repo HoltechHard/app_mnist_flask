@@ -26,3 +26,26 @@
 
 > pip install scipy==1.1.0
 
+5) commands to send project files to github repo
+
+$ echo "# app_mnist_flask" >> README.md 
+$ git init 
+$ git remote add origin https://github.com/HoltechHard/app_mnist_flask.git
+$ git add README.md 
+$ git commit -m "project description"
+$ git add app_mnist/*
+$ git commit -m "application python + flask"
+$ git add dataset/*
+$ git commit -m "mnist dataset"
+$ git add jupyter_mnist/*
+$ git commit -m "jupyter AI model"
+$ git add init_commands.txt
+$ git commit -m "basic commands"
+$ git push origin master
+
+6) commands to edit project files to github repo
+
+$ git add init_commands.txt 
+$ git commit -m "updated basic commands"
+$ git pull origin master
+$ git push origin master
