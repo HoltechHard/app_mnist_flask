@@ -1,0 +1,28 @@
+=============================================
+|        MNIST PROJECT: PYTHON + FLASK      |
+=============================================
+
+1) Structure diagram of a general DL Application
+
+
+-----------------     sys calls          ----------
+|               |       <===>           | DL Model |
+|    Server     |                        -----------
+|               |       <===>            -----------
+-----------------     Http requests     |  Client  |
+                                        ------------
+
+2) versions of packages
+
+- python 3.9.7 
+- flask 1.1.2
+- tensorflow 2.10.1
+
+3) run the flask Server
+
+> python flask_app.py
+
+4) install some adding packages
+
+> pip install scipy==1.1.0
+
