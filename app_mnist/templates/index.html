@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App MNIST </title>
+</head>
+<body>
+    <h1>MNIST handwritten digits predictor</h1>
+    <form id="upload-form" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+        <input type="file" name="image" value="Upload" />        
+        <input type="submit" value="Predict" id="btnPredict" />
+    </form>
+    <br>
+    <div id="uploaded-image-container">
+        <img id="uploaded-image" src="">
+    </div>
+    <h3>Prediction: <span id="result"></span></h3>
+
+    <script type="application/javascript" src="{{ url_for('static', filename = 'js/jquery-3.7.0.min.js') }}"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename = 'js/index.js') }}"></script>
+</body>
+</html>
