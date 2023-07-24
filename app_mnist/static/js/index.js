@@ -29,8 +29,8 @@ $(document).ready(function(){
                     contentType: false,
                     enctype: 'multipart/form-data',
                     processData: false,
-                    success: function(response){            
-                        $('#result').empty().append(response);            
+                    success: function(response){
+                        $('#class_result').empty().append(response.class_pred);                                                
                     }
                 }); 
             }
