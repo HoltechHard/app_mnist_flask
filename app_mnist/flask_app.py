@@ -6,6 +6,7 @@ import tensorflow as tf
 from PIL import Image
 import os
 from werkzeug.utils import secure_filename
+import sqlite3
 
 # read the json file which contains the model
 json_file = open("model_api/model.json", "r")
@@ -19,13 +20,60 @@ model.compile(loss = "categorical_crossentropy", optimizer = "adam",
               metrics = ["accuracy"])
 graph = tf.compat.v1.get_default_graph()
 
+# get the list of image paths
+def get_image_paths():
+    image_dir = 'static/images'
+    image_paths = [os.path.join(image_dir, filename) for filename in os.listdir(image_dir)]
+    return image_paths
+
+# save register of image path and prediction in database
+def insert_register(img_path, pred):
+    # connect with sqlite
+    cnn = sqlite3.connect('mymnist.db')
+    # create cursor 
+    cursor = cnn.cursor()
+    # execute insert
+    cursor.execute("insert into tbl_mnist(img_path, pred_class) values(?, ?)",
+                (img_path, pred))
+    # commit transaction
+    cnn.commit()
+    # close connection
+    cursor.close()
+    cnn.close()
+
+    return jsonify({'success': True})
+
 # setting the app
 app = Flask(__name__)
 
 # main page
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # load the table with data
+
+    # select database operation
+    # connect with sqllite
+    cnn = sqlite3.connect('mymnist.db')
+    # create cursor
+    cursor = cnn.cursor()
+    # query to read the last inserted data
+    cursor.execute("select id_image, img_path, pred_class from tbl_mnist")
+    # retrieve data
+    rows = cursor.fetchall()
+
+    # convert data query to json 
+    data = []
+    for row in rows:
+        data.append({
+            'id': row[0],
+            'img_path': row[1],
+            'pred_class': row[2]
+        })
+    
+    # close connection
+    cnn.close()
+
+    return render_template("index.html", data = data)
 
 # convert base64-string to image
 
@@ -47,10 +95,11 @@ def predict():
         stringToImage(img_data)    
     except:
         f = request.files['image']
-        f.save('image.png')
+        filename = f.filename
 
-    # format the image        
-    img = Image.open('image.png')
+    # format the image
+    img_path = os.path.join('static/images', filename)
+    img = Image.open(img_path)
     img = img.convert('L')
     img_sized = img.resize((28, 28))
 
@@ -64,7 +113,13 @@ def predict():
     # take class
     response = np.argmax(prediction, axis = 1)
 
-    return str(response[0])
+    # insert new register in database
+    insert_register(img_path, str(response[0]))
+
+    # object with results    
+    return jsonify({
+        'class_pred': str(response[0])
+    })    
 
 # page to upload image files
 @app.route('/upload/', methods = ['GET', 'POST'])
@@ -82,7 +137,7 @@ def upload():
         })
     
     return 'No image was uploaded'
-
+    
 # main call function
 if __name__ == "__main__":
     app.run(host = "0.0.0.0", port = 80)
