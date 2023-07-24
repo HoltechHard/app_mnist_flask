@@ -14,8 +14,28 @@
     <br>
     <div id="uploaded-image-container">
         <img id="uploaded-image" src="">
-    </div>
-    <h3>Prediction: <span id="result"></span></h3>
+        <h4>Class-prediction: <span id="class_result"></span></h4>        
+    </div>    
+
+    <h3>List of images</h3>
+    <table>
+        <thead>
+            <tr>
+                <th> ID </th>
+                <th>Image</th>
+                <th>Class-prediction</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+            <tr>
+                <td>{{ row['id'] }}</td>
+                <td><img src="{{ row['img_path'] }}" width="100" height="100"></td> <br>
+                <td>digit = {{ row['pred_class'] }}</td>
+            </tr>            
+        {% endfor %}
+        </tbody>
+    </table>
 
     <script type="application/javascript" src="{{ url_for('static', filename = 'js/jquery-3.7.0.min.js') }}"></script>
     <script type="application/javascript" src="{{ url_for('static', filename = 'js/index.js') }}"></script>
