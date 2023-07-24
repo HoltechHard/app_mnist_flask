@@ -49,3 +49,7 @@ $ git add init_commands.txt
 $ git commit -m "updated basic commands"
 $ git pull origin master
 $ git push origin master
+
+7) windows command line to generate root of project
+
+> tree /a /f > root_project.txt
